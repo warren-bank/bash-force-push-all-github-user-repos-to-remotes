@@ -21,22 +21,32 @@ repo_data='repo_data.json'
 repo_blacklist='repo_blacklist.js'
 repo_names='repo_names.txt'
 
-echo '[' >"$repo_data"
-for i in {1..30000}
-do
-  data=$(curl --insecure --silent "${api_url}${i}")
-  if [[ "$data" =~ "{" ]];then
-    if [ $i -gt 1 ];then
-      echo ',' >>"$repo_data"
+if [ -f "$repo_data" -a $reuse_json_repo_data_if_already_exist -ne 1 ];then
+  rm -f "$repo_data"
+fi
+if [ ! -f "$repo_data" ];then
+  echo '[' >"$repo_data"
+  for i in {1..30000}
+  do
+    data=$(curl --insecure --silent "${api_url}${i}")
+    if [[ "$data" =~ "{" ]];then
+      if [ $i -gt 1 ];then
+        echo ',' >>"$repo_data"
+      fi
+      echo "$data" >>"$repo_data"
+    else
+      break
     fi
-    echo "$data" >>"$repo_data"
-  else
-    break
-  fi
-done
-echo ']' >>"$repo_data"
+  done
+  echo ']' >>"$repo_data"
+fi
 
-node -e "const repo_data = require('./${repo_data}'); const repo_blacklist = require('./${repo_blacklist}'); const repo_names = []; for (let repo_group of repo_data) { for (let repo of repo_group) { if (!repo.disabled && !repo_blacklist.includes(repo.name)) { repo_names.push(repo.name); } } } console.log(repo_names.join('\n'));" >"$repo_names"
+if [ -f "$repo_names" -a $reuse_text_repo_names_if_already_exists -ne 1 ];then
+  rm -f "$repo_names"
+fi
+if [ ! -f "$repo_names" ];then
+  node -e "const repo_data = require('./${repo_data}'); const repo_blacklist = require('./${repo_blacklist}'); const repo_names = []; for (let repo_group of repo_data) { for (let repo of repo_group) { if (!repo.disabled && !repo_blacklist.includes(repo.name)) { repo_names.push(repo.name); } } } console.log(repo_names.join('\n'));" >"$repo_names"
+fi
 
 # -------------------------------------------------------------------- clone github repo:
 
@@ -51,6 +61,12 @@ function clone_github_repo() {
 function pull_github_repo() {
   git pull -f        "$github_remote_name"
   git pull -f --tags "$github_remote_name"
+}
+
+# -------------------------------------------------------------------- fetch github lfs:
+
+function fetch_github_lfs() {
+  git lfs fetch --all "$github_remote_name"
 }
 
 # -------------------------------------------------------------------- track all branches on github:
@@ -69,11 +85,13 @@ function track_all_branches_on_github() {
 function add_remotes() {
   repo_name="$1"
 
-  gitlab_repo="git@gitlab.com:${gitlab_user_name}/${repo_name}.git"
-  codeberg_repo="git@codeberg.org:${codeberg_user_name}/${repo_name}.git"
+  if [ $push_to_gitlab -eq 1 -a -n "$gitlab_user_name" ];then
+    git remote add gitlab "git@gitlab.com:${gitlab_user_name}/${repo_name}.git"
+  fi
 
-  git remote add gitlab   "$gitlab_repo"
-  git remote add codeberg "$codeberg_repo"
+  if [ $push_to_codeberg -eq 1 -a -n "$codeberg_user_name" ];then
+    git remote add codeberg "git@codeberg.org:${codeberg_user_name}/${repo_name}.git"
+  fi
 }
 
 # -------------------------------------------------------------------- push to remote:
@@ -82,6 +100,7 @@ function push_to_remote() {
   remote_name="$1"
 
   git push -f --all  "$remote_name"
+  git lfs push --all "$remote_name"
   git push -f --tags "$remote_name"
 }
 
@@ -99,10 +118,15 @@ while read repo_name; do
       clone_github_repo "$repo_name"
       cd "$repo_name"
     fi
+    fetch_github_lfs
     track_all_branches_on_github
     add_remotes "$repo_name"
-    push_to_remote "gitlab"
-    push_to_remote "codeberg"
+    if [ $push_to_gitlab -eq 1 ];then
+      push_to_remote "gitlab"
+    fi
+    if [ $push_to_codeberg -eq 1 ];then
+      push_to_remote "codeberg"
+    fi
     cd ..
     if [ $delete_repos_after_push -eq 1 ];then
       rm -rf "$repo_name"
