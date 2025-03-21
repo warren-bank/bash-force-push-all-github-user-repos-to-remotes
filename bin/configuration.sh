@@ -15,6 +15,7 @@ export codeberg_user_name='warren-bank'
 export reuse_json_repo_data_if_already_exist=0
 export reuse_text_repo_names_if_already_exists=0
 
+export perform_git_operations=1
 export push_to_gitlab=1
 export push_to_codeberg=1
 

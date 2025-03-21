@@ -26,6 +26,7 @@ Android-PTT-Bluetooth-Speaker
 Android-Root-Script-Runner
 Android-RTSP-IPCam-Viewer
 Android-RTSP-ScreenCaster
+Android-ShareForwarding
 Android-SMS-Automatic-Forwarding
 Android-SMS-Automatic-Reply-GPS
 Android-Tiny-Television-Time-Tracker
@@ -33,6 +34,8 @@ Android-WebCast
 Android-WebMonkey
 Android-WebViewClientObserver
 atom-tree-view-nodnd
+bash-add-all-github-user-release-assets-to-mono-repo
+bash-force-push-all-github-user-repos-to-remotes
 bash-ibroadcast-uploader
 boilerplate-for-webpack-with-typescript
 browser-castv2
@@ -46,10 +49,14 @@ chrome-extension-to-zip-archive-converter
 clappr-chromecast-captions-plugin
 clappr-chromecast-plugin
 CreateDOM
+crx-10play
 crx-123TV
 crx-2Embed
+crx-7plus
 crx-9Anime
+crx-9now
 crx-ABC
+crx-abc-iview
 crx-ABC-News
 crx-airbnb-pricesort
 crx-AiryTV
@@ -62,7 +69,10 @@ crx-BBC-News
 crx-CBC-Gem
 crx-CBS
 crx-CBS-News
+crx-channel4
+crx-channel5
 crx-Cinegrabber
+crx-collegesportslive
 crx-cookie-cleaner
 crx-cookie-editor
 crx-cors-lite
@@ -85,7 +95,9 @@ crx-googlesource-raw-format
 crx-header
 crx-IMDb
 crx-Internet-Archive-clipstream
+crx-itv
 crx-lineageos-stats-model-sort
+crx-link-to-intent
 crx-LiveNewsOn
 crx-LookMovie
 crx-MHD-TV-World
@@ -104,6 +116,7 @@ crx-polyfill-everywhere
 crx-Radio-Net
 crx-Rai-Play
 crx-ruutu-fi
+crx-sbs
 crx-show-http-headers
 crx-simple-modify-headers
 crx-Soap2day
@@ -112,11 +125,13 @@ crx-Streamlare
 crx-StreamLive-To
 crx-tabs-backup-restore
 crx-The-CW
+crx-threenow
 crx-TikTok
 crx-Tracfone-store
 crx-Tubi-TV
 crx-TuneIn-Radio
 crx-tv247-us
+crx-tvb-anywhere
 crx-tvply-me
 crx-UpStream
 crx-US-TV-Go
@@ -133,6 +148,7 @@ crx-webpage-extractor
 crx-window-navigator
 crx-YourSports-Stream
 crx-Youtube
+crx-Youtube-subtitles
 crx-Youtube-transcoder
 crx-yt-dlp
 dapp-console
@@ -149,6 +165,7 @@ fdroid
 fdroid-search
 fdroid-search-server
 fdroidserver-for-windows
+fork-Android-ADB-OTG
 fork-Android-Droidify
 fork-Android-Hauk
 fork-Android-Httper
@@ -156,6 +173,8 @@ fork-Android-Jumble
 fork-Android-My-Places
 fork-Android-Plumble
 fork-Android-proxydroid
+fork-Android-snapdrop-client
+fork-Android-strongSwan
 fork-Android-webview-gm
 fork-apollographql-fullstack-tutorial
 fork-challenge-bypass-extension
@@ -194,6 +213,7 @@ fork-redux
 fork-rtf.js
 fork-serverless-guide
 fork-sjcl-full
+fork-snapdrop
 fork-vm-browserify
 fork-webpack-import-map-plugin
 fun-with_perl_http-proxy
@@ -266,6 +286,7 @@ node-translate-fdroid-metadata-text-files
 node-translate-subtitles
 node-translate-webextension-strings
 node-ttml2srt-cli
+node-widevine-license-proxy
 npm-global
 pdf-check-printer
 playground-castv2

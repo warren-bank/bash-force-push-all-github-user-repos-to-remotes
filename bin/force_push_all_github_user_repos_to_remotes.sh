@@ -106,30 +106,32 @@ function push_to_remote() {
 
 # -------------------------------------------------------------------- iterate github repos:
 
-while read repo_name; do
-  if [ -n "$repo_name" ];then
-    if [ -d "$repo_name" -a $delete_repos_if_already_exist -eq 1 ];then
-      rm -rf "$repo_name"
+if [ $perform_git_operations -eq 1 ];then
+  while read repo_name; do
+    if [ -n "$repo_name" ];then
+      if [ -d "$repo_name" -a $delete_repos_if_already_exist -eq 1 ];then
+        rm -rf "$repo_name"
+      fi
+      if [ -d "$repo_name" ];then
+        cd "$repo_name"
+        pull_github_repo
+      else
+        clone_github_repo "$repo_name"
+        cd "$repo_name"
+      fi
+      fetch_github_lfs
+      track_all_branches_on_github
+      add_remotes "$repo_name"
+      if [ $push_to_gitlab -eq 1 ];then
+        push_to_remote "gitlab"
+      fi
+      if [ $push_to_codeberg -eq 1 ];then
+        push_to_remote "codeberg"
+      fi
+      cd ..
+      if [ $delete_repos_after_push -eq 1 ];then
+        rm -rf "$repo_name"
+      fi
     fi
-    if [ -d "$repo_name" ];then
-      cd "$repo_name"
-      pull_github_repo
-    else
-      clone_github_repo "$repo_name"
-      cd "$repo_name"
-    fi
-    fetch_github_lfs
-    track_all_branches_on_github
-    add_remotes "$repo_name"
-    if [ $push_to_gitlab -eq 1 ];then
-      push_to_remote "gitlab"
-    fi
-    if [ $push_to_codeberg -eq 1 ];then
-      push_to_remote "codeberg"
-    fi
-    cd ..
-    if [ $delete_repos_after_push -eq 1 ];then
-      rm -rf "$repo_name"
-    fi
-  fi
-done <"$repo_names"
+  done <"$repo_names"
+fi
